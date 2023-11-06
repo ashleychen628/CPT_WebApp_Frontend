@@ -1,0 +1,21 @@
+.Canvas {
+    border-width: 2pt;
+    border-style: solid;
+    border-color: #efefef;
+    margin-bottom: 1em;
+    position: relative;
+    .Molstar_canvas {
+        overflow: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 20px;
+        .Molstar_structure {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            // top: 50%;
+            // left: 30%;
+        }
+    }
+}

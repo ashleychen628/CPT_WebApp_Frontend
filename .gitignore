@@ -2,7 +2,6 @@
 
 # dependencies
 cpt/node_modules/
-cpt/public/pdbe-molstar/
 
 # testing
 /coverage

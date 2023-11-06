@@ -1,0 +1,67 @@
+diff --git a/node_modules/react-map-interaction/dist/react-map-interaction.js b/node_modules/react-map-interaction/dist/react-map-interaction.js
+index bbf7e89..d8de820 100644
+--- a/node_modules/react-map-interaction/dist/react-map-interaction.js
++++ b/node_modules/react-map-interaction/dist/react-map-interaction.js
+@@ -206,6 +206,7 @@ function (_Component) {
+         },
+         onClick: plusHandler,
+         onTouchEnd: plusHandler,
++        id: 'plusBtn',
+         className: [btnClass ? btnClass : '', plusBtnClass ? plusBtnClass : ''].join(' '),
+         type: "button",
+         style: btnClass || plusBtnClass ? undefined : btnStyle,
+@@ -559,6 +560,11 @@ function (_Component) {
+       e.stopPropagation();
+       var scaleChange = Math.pow(2, e.deltaY * 0.002);
+       var newScale = clamp(this.props.minScale, this.props.value.scale + (1 - scaleChange), this.props.maxScale);
++
++      let newGap = newScale * 10 - 10;
++      document.getElementById("x-labels").style.gap = newGap + "px";
++      document.getElementById("x-labels").style.paddingLeft = newGap / 2 + "px";
++
+       var mousePos = this.clientPosToTranslatedPos({
+         x: e.clientX,
+         y: e.clientY
+@@ -632,11 +638,13 @@ function (_Component) {
+       var scaleRatio = newScale / (scale != 0 ? scale : 1);
+       var focalPtDelta = {
+         x: coordChange(focalPt.x, scaleRatio),
+-        y: coordChange(focalPt.y, scaleRatio)
++        // y: coordChange(focalPt.y, scaleRatio)
++        y: focalPt.y
+       };
+       var newTranslation = {
+         x: translation.x - focalPtDelta.x,
+-        y: translation.y - focalPtDelta.y
++        // y: translation.y - focalPtDelta.y
++        y: translation.y
+       };
+       this.props.onChange({
+         scale: newScale,
+@@ -706,9 +714,15 @@ function (_Component) {
+           minScale = _this$props3.minScale,
+           maxScale = _this$props3.maxScale;
+       var scale = clamp(minScale, targetScale, maxScale);
++
++      let newGap = scale * 10 - 10;
++      document.getElementById("x-labels").style.gap = newGap + "px";
++      document.getElementById("x-labels").style.paddingLeft = newGap / 2 + "px";
++      
+       var rect = this.getContainerBoundingClientRect();
+       var x = rect.left + rect.width / 2;
+-      var y = rect.top + rect.height / 2;
++      // var y = rect.top + rect.height / 2;
++      var y = rect.top + rect.height;
+       var focalPoint = this.clientPosToTranslatedPos({
+         x: x,
+         y: y
+@@ -987,7 +1001,8 @@ var MapInteractionCSS_MapInteractionCSS = function MapInteractionCSS(props) {
+     var translation = _ref.translation,
+         scale = _ref.scale;
+     // Translate first and then scale.  Otherwise, the scale would affect the translation.
+-    var transform = "translate(".concat(translation.x, "px, ").concat(translation.y, "px) scale(").concat(scale, ")");
++    // var transform = "translate(".concat(translation.x, "px, ").concat(translation.y, "px) scale(").concat(scale, ")");
++    var transform = "translate(".concat(translation.x, "px, ").concat(translation.y, "px) scale(").concat(scale, ", 1)");
+     return external_commonjs_react_commonjs2_react_amd_React_root_React_default.a.createElement("div", {
+       style: {
+         height: '100%',

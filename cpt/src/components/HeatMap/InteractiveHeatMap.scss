@@ -1,0 +1,53 @@
+
+.heatmap-section{
+    width: 100%;
+    .heatmap-part{
+            position: relative;
+            // padding-right: 20px;
+            float: left;
+            width: 96%;
+        .heatmap-item{
+            border-width: 2pt;
+            border-style: solid;
+            border-color: #efefef;
+            position: absolute;
+            margin-top: 0;
+            // padding-right: 100px;
+        }
+    }
+    .gradientbar-and-label {
+        width: 2%;
+        float: right;
+        // border-width: 1pt;
+        // border-style: solid;
+        // border-color: #dcdcdc;
+        height: 220px;
+        // margin-top: 16px;
+    }
+    // .gradient{
+    //     width: 2%;
+    //     float: right;
+    //     .gradient-bar {
+    //         border-width: 1pt;
+    //         border-style: solid;
+    //         border-color: #dcdcdc;
+    //         height: 220px;
+    //         width: 20px;
+    //         background: linear-gradient(0deg, rgba(111, 168, 220, 1) 0%, rgba(238, 238, 238, 1) 40%, rgba(238, 238, 238, 1) 60%, rgba(210, 17, 17, 1) 100%);
+    //     }
+    // }
+}
+
+// .gradient-bar{
+//     margin-top: 2em;
+//     margin-bottom: 2em;
+// }
+
+.customize{
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    position: relative;
+}
