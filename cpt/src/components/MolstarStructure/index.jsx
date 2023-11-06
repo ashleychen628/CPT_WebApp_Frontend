@@ -7,7 +7,7 @@ import ColoredByCPT from './ColoredByCPT';
 
 export default function MolstarStructure(props) {
     // Script("../../pdbe-molstar-component-3.1.2.js")
-    const cpt_data_url = 'http://127.0.0.1:5000/getCifFile/' + props.proteinId;
+    const cpt_data_url = 'https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCifFile/' + props.proteinId;
     // const cpt_data_url = "https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCifFile/1433G"
     const alphafold_data_url = "https://alphafold.ebi.ac.uk/files/AF-P61981-F1-model_v1.cif";
 

@@ -51,7 +51,7 @@ export default function UploadData(props) {
         const data = new FormData();
         data.append('file', selectedFile);
 
-        fetch('http://127.0.0.1:5000/uploadUserData/' + dataName, {
+        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/uploadUserData/' + dataName, {
             method: "POST",
             body: data,
         })

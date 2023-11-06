@@ -21,7 +21,7 @@ export default function DensityPlot(props) {
     // const [minY, setMinY] = useState();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/getCPTAvgScores/' + props.proteinId, {
+        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCPTAvgScores/' + props.proteinId, {
             method: "GET"
         })
             .then((res) => {

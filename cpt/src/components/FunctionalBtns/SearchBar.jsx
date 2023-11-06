@@ -19,7 +19,7 @@ export default function SearchBar() {
     const loading = open && ProteinGeneList.length === 0;
 
     // useEffect(() => {
-    //         fetch('http://127.0.0.1:5000/getProteinNames'
+    //         fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getProteinNames'
     //             , {method: "GET"})
     //         .then((res) => {
     //             return res.json();
@@ -34,7 +34,7 @@ export default function SearchBar() {
         return undefined;
         }
 
-        fetch('http://127.0.0.1:5000/getProteinNames'
+        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getProteinNames'
             , {method: "GET"})
         .then((res) => {
             return res.json();

@@ -39,7 +39,7 @@ export default function ProteinPage() {
     // const [title, setTitle] = useState(proteinId + "_HUMAN CPT");
    
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
+        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
             method: "GET"
         })
             .then((res) => {
@@ -89,7 +89,7 @@ export default function ProteinPage() {
     }, [cptScores]);
 
     const handleDownloadFile = () => {
-        fetch('http://127.0.0.1:5000/exportFile/' + proteinId, {
+        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/exportFile/' + proteinId, {
             method: "GET"
         })
             .then((res) => {
