@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import TableContents from './TableContents';
 import './ClinVarTable.scss';
+import globalVal from '../../globalVal';
 
 function createData(mutant, label, score, mutant_sort, label_sort) {
   return {mutant, label, score, mutant_sort, label_sort};
@@ -29,7 +30,7 @@ export default function ClinVarTable(props) {
   }
 
   useEffect(() => {
-    fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getTableContents/' + props.proteinId, {
+    fetch(globalVal.baseUrl + 'getTableContents/' + props.proteinId, {
       method: "GET"
     })
       .then((res) => {

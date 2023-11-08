@@ -5,7 +5,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import './DensityPlot.scss'
+import './DensityPlot.scss';
+import globalVal from '../../globalVal';
 
 // const PLOTWIDTH = 850;
 // const PLOTHEIGHT = 100;
@@ -19,9 +20,8 @@ export default function DensityPlot(props) {
     const [showPoints, setShowPoints] = useState(false);
     // const [maxY, setMaxY] = useState();
     // const [minY, setMinY] = useState();
-
     useEffect(() => {
-        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCPTAvgScores/' + props.proteinId, {
+        fetch(globalVal.baseUrl + 'getCPTAvgScores/' + props.proteinId, {
             method: "GET"
         })
             .then((res) => {

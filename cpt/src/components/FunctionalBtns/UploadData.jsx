@@ -16,6 +16,7 @@ import { Navigate } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import globalVal from '../../globalVal';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -51,7 +52,7 @@ export default function UploadData(props) {
         const data = new FormData();
         data.append('file', selectedFile);
 
-        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/uploadUserData/' + dataName, {
+        fetch(globalVal.baseUrl + 'uploadUserData/' + dataName, {
             method: "POST",
             body: data,
         })

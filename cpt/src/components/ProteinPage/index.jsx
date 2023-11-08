@@ -16,6 +16,7 @@ import { Helmet } from "react-helmet";
 import Divider from '@mui/material/Divider';
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import IconButton from '@mui/material/IconButton';
+import globalVal from "../../globalVal";
 
 const AA_LIST_PROPERTY = 'WFYPMILVAGCSTQNDEHRK';
 const EQUAL_THRESHOLD = 1e-12;
@@ -37,9 +38,9 @@ export default function ProteinPage() {
     const [xLabels, setXlabel] = useState();
     const [cptScores, setCPTscores] = useState();
     // const [title, setTitle] = useState(proteinId + "_HUMAN CPT");
-   
+       console.log(globalVal.baseUrl)
     useEffect(() => {
-        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
+        fetch(globalVal.baseUrl + 'getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
             method: "GET"
         })
             .then((res) => {
@@ -89,7 +90,7 @@ export default function ProteinPage() {
     }, [cptScores]);
 
     const handleDownloadFile = () => {
-        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/exportFile/' + proteinId, {
+        fetch(globalVal.baseUrl + 'exportFile/' + proteinId, {
             method: "GET"
         })
             .then((res) => {

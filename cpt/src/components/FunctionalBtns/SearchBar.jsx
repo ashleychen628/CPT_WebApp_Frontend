@@ -3,6 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { NavBtn, NavBtnLink, NavBtnLinkDisable, NavSearch } from '../Navbar/NavbarElements';
 import CircularProgress from '@mui/material/CircularProgress';
+import globalVal from '../../globalVal';
 
 // import { ThemeProvider } from '@mui/material/styles';
 // import theme from "../../Theme";
@@ -34,7 +35,7 @@ export default function SearchBar() {
         return undefined;
         }
 
-        fetch('https://n7ypyxmdo0.execute-api.us-east-2.amazonaws.com/dev/getProteinNames'
+        fetch(globalVal.baseUrl + 'getProteinNames'
             , {method: "GET"})
         .then((res) => {
             return res.json();
