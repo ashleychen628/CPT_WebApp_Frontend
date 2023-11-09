@@ -4,16 +4,44 @@
     border-color: #efefef;
     margin-bottom: 1em;
     position: relative;
-    .Molstar_canvas {
+    display: flex;
+    flex-direction: column;
+    .Control-Panel {
+        padding-left: 20px;
+        padding-top: 5px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        .control-canvas1 {
+            width: 50%;
+            position: relative;
+            float: left;
+        }
+        .control-canvas2{
+            width: 50%;
+            position: relative;
+            float: right;
+        }
+    }
+    .Molstar-canvas {
         overflow: auto;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         padding: 20px;
-        .Molstar_structure {
-            width: 600px;
+        .canvas1 {
+            width: 49%;
             height: 600px;
             position: relative;
+            float: left;
+            // top: 50%;
+            // left: 30%;
+        }
+        .canvas2 {
+            width: 49%;
+            height: 600px;
+            position: relative;
+            float: right;
             // top: 50%;
             // left: 30%;
         }

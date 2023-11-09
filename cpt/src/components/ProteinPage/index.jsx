@@ -38,7 +38,7 @@ export default function ProteinPage() {
     const [xLabels, setXlabel] = useState();
     const [cptScores, setCPTscores] = useState();
     // const [title, setTitle] = useState(proteinId + "_HUMAN CPT");
-       console.log(globalVal.baseUrl)
+
     useEffect(() => {
         fetch(globalVal.baseUrl + 'getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
             method: "GET"
