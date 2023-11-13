@@ -1,0 +1,20 @@
+.input-section {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    .notes{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        .requirements {
+            width: 50%;
+            float: left;
+        }
+        .selectedFileName {
+            width: 47%;
+            float: right;
+        }
+    }
+}

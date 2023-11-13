@@ -49,7 +49,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
+const headCells_cpt = [
   {
     id: 'mutant',
     sort_id: 'mutant_sort',
@@ -69,7 +69,31 @@ const headCells = [
     sort_id: 'score',
     numeric: true,
     minWidth: 100,
-    label: 'CPT Score',
+    label: 'CPT Scores',
+  }
+];
+
+const headCells_user = [
+  {
+    id: 'mutant',
+    sort_id: 'mutant_sort',
+    numeric: false,
+    minWidth: 90,
+    label: 'Mutant',
+  },
+  {
+    id: 'label',
+    sort_id: 'label_sort',
+    numeric: true,
+    minWidth: 90,
+    label: 'Label',
+  },
+  {
+    id: 'score',
+    sort_id: 'score',
+    numeric: true,
+    minWidth: 100,
+    label: 'Uploaded Scores',
   }
 ];
 
@@ -79,10 +103,18 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const [headCells, setHeadCells] = useState(headCells_cpt);
+
+  // var headCells = props.dataSource === 'cpt' ? headCells_cpt : headCells_user
+  const getHeadCells = () => {
+    var hC = props.dataSource === 'cpt' ? headCells_cpt : headCells_user
+    setHeadCells(hC);
+  }
 
   return (
     <TableHead>
       <TableRow>
+        {getHeadCells}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

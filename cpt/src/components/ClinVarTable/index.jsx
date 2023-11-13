@@ -39,7 +39,7 @@ export default function ClinVarTable(props) {
       .then((data) => {
         setData(data["all_one_star"]);
       })
-  }, []);
+  }, [props.cptScores]);
   
   return (
     <div>
@@ -59,7 +59,7 @@ export default function ClinVarTable(props) {
         (* Variants labeled N/A are either VUS or 0-star annotations)
       </p>
         <div className='TableContents'>
-          {rows && < TableContents rows={rows} />}
+          {rows && < TableContents rows={rows} dataSource={props.dataSource} />}
         </div>
     </div>
   )

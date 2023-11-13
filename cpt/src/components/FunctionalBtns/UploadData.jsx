@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -15,8 +15,34 @@ import Box from '@mui/material/Box';
 import { Navigate } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import globalVal from '../../globalVal';
+import ProteinGeneList from './ProteinGeneList';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import './UploadData.scss';
+
+import Collapse from '@mui/material/Collapse';
+import CardContent from '@mui/material/CardContent';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CardActions from '@mui/material/CardActions';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -37,10 +63,9 @@ export default function UploadData(props) {
     const [option, setOption] = useState();
     const navigate = useNavigate();
     var disableUpload = true;
-    
-    // console.log(selectedFileName);
-    // console.log(selectedFile);
-    // console.log(dataName);
+
+    const [value, setValue] = useState('');
+    const [inputValue, setInputValue] = useState('');
 
     const handleUpload = ({ target }) => {
         // console.log(target.files[0])
@@ -48,25 +73,27 @@ export default function UploadData(props) {
         setSelectedFile(target.files[0]);
     };
     
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
         const data = new FormData();
         data.append('file', selectedFile);
 
-        fetch(globalVal.baseUrl + 'uploadUserData/' + dataName, {
+        fetch(globalVal.baseUrl + 'uploadUserData/' + dataName
+            , {
             method: "POST",
             body: data,
         })
         .then((response) => {
             response.json()
                 .then((body) => {
-                    // console.log(body)
                     // TODO: handle error messages
                     setDataName("");
                     setSelectedFile(null);
                     setSelectedFileName("");
                     props.handleClose();
                     navigate('/proteins/user/' + dataName);
-                    // navigate('/proteins/1433G');
+                    window.location.reload();
                 })
         });
     }
@@ -84,6 +111,12 @@ export default function UploadData(props) {
         setDataName("");
     }
 
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     return (
         <div>
         <Dialog open={props.open} onClose={props.handleClose} fullWidth="true">
@@ -95,7 +128,7 @@ export default function UploadData(props) {
                                                         flexDirection: "column",
                                                         gap: "30px"
                                                     }}>
-                    <Box
+                    {/* <Box
                         component="form"
                         sx={{
                             '& .MuiTextField-root': { m: 1, width: '20ch' },
@@ -112,15 +145,66 @@ export default function UploadData(props) {
                                 onChange={(e) => {
                                     setDataName(e.target.value);
                                 }} />
-                    </Box>
+                    </Box> */}
+                    <ProteinGeneList setValue={setDataName} setInputValue={setInputValue}
+                        value={dataName} inputValue={inputValue} />
                         
                     <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
                         Upload file
                         <VisuallyHiddenInput type="file" onChange={handleUpload} accept='.csv'/>
                     </Button>
+                    <div className='notes'>
+                    <div className='requirements'>
                         <DialogContentText>
-                            *  upload .csv only
+                            {/* <u>Format Requirements</u>
+                            <span><IconButton aria-label="arrowdropdown" onClick={handleDeleteFile} >
+                                    <ArrowDropDownIcon />
+                                    </IconButton></span>
+                            <br />
+                            <ul>
+                                <li>Upload .csv files only</li>
+                                <li>Include 2 columns in .csv file:</li>
+                                    <ol>
+                                        <li>column name: "mutant", content</li>   
+                                    </ol>
+                                <li>Milk</li>
+                            </ul>   */}
+                                    <Card>
+                                        <CardActions disableSpacing>
+                                            <u>Format Requirements</u>
+
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+        </CardActions>
+                                        
+                        <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                        <Typography paragraph fontSize="0.9rem">
+                            1. Upload .csv files only
+                        </Typography>
+                        <Typography paragraph fontSize="0.9rem">
+                            2. Include 2 columns in .csv file:
+                        <ul>
+                            <li>name: "mutant", content: [mutant position] + [amino acid], e.g."M1A"</li>   
+                            <li>name: [YOUR_FILE_NAME] e.g. "cpt", content: [scores]</li> 
+                        </ul>
+                        </Typography>
+                        <Typography paragraph fontSize="0.9rem">
+                           3. download <u>example</u> for reference
+                        </Typography>
+                       
+                        </CardContent>
+                                        </Collapse>
+                                        </Card>
                         </DialogContentText>
+                    </div>
+                    <div className='selectedFileName'>
                     { selectedFileName !== "" &&
                         <DialogContentText>
                                 {selectedFileName}
@@ -130,6 +214,8 @@ export default function UploadData(props) {
                         </DialogContentText> 
 
                     }
+                    </div>
+                    </div>
                 </div>
             </DialogContent>
             <DialogActions>
@@ -139,6 +225,11 @@ export default function UploadData(props) {
                 ? disableUpload = false
                 : disableUpload = true            
             }
+            {/* {
+                selectedFile !== null && value !== "" 
+                ? disableUpload = false
+                : disableUpload = true            
+            } */}
             <Button onClick={handleSubmit} variant="outlined" autoFocus disabled={disableUpload}>Submit and Visualize</Button>
             </DialogActions>
         </Dialog>

@@ -5,7 +5,6 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import './DensityPlot.scss';
 import globalVal from '../../globalVal';
 
 // const PLOTWIDTH = 850;
@@ -17,11 +16,11 @@ const precision = 2;
 
 export default function DensityPlot(props) {
     const [avgScore, setAvgScore] = useState();
+    const [maxX, setMaxX] = useState();
     const [showPoints, setShowPoints] = useState(false);
-    // const [maxY, setMaxY] = useState();
-    // const [minY, setMinY] = useState();
+
     useEffect(() => {
-        fetch(globalVal.baseUrl + 'getCPTAvgScores/' + props.proteinId, {
+        fetch(globalVal.baseUrl + 'getCPTAvgScores/' + props.proteinId + "?dataSource=" + props.dataSource, {
             method: "GET"
         })
             .then((res) => {
@@ -29,10 +28,9 @@ export default function DensityPlot(props) {
             })
             .then((data) => {
                 setAvgScore(data["avg_scores"]);
-                // setMaxY(data["y_max"]);
-                // setMinY(data["y_min"]);
+                setMaxX(data["avg_scores"].length);
             })
-    }, []);
+    }, [props.cptScores]);
 
     const handleShowPoints = (event) => {
         setShowPoints(!showPoints)
@@ -56,6 +54,7 @@ export default function DensityPlot(props) {
                     height={PLOT_HEIGHT}
                     precision={2}
                     maxY={1}
+                    // maxX={maxX}
                     maxX={246}
                     cptScores={props.cptScores}
                     showPoints={showPoints}

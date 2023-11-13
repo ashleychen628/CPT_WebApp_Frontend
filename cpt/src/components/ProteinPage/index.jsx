@@ -17,6 +17,7 @@ import Divider from '@mui/material/Divider';
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import IconButton from '@mui/material/IconButton';
 import globalVal from "../../globalVal";
+import {useLocation} from "react-router-dom";
 
 const AA_LIST_PROPERTY = 'WFYPMILVAGCSTQNDEHRK';
 const EQUAL_THRESHOLD = 1e-12;
@@ -31,27 +32,30 @@ const BLUE = rgb(111, 168, 220);
 
 export default function ProteinPage() {
     const urlParameters = useParams();
-    let proteinId = urlParameters.proteinId;
+    let pId = urlParameters.proteinId;
     let dataSource = urlParameters.dataSource;
 
     const [yLabels, setYlabel] = useState();
     const [xLabels, setXlabel] = useState();
     const [cptScores, setCPTscores] = useState();
-    // const [title, setTitle] = useState(proteinId + "_HUMAN CPT");
+    const [proteinId, setProteinId] = useState();
+    const location = useLocation();
 
     useEffect(() => {
-        fetch(globalVal.baseUrl + 'getCPTscores/' + proteinId + "?dataSource=" + dataSource, {
+        fetch(globalVal.baseUrl + 'getCPTscores/' + pId + "?dataSource=" + dataSource, {
             method: "GET"
         })
             .then((res) => {
                 return res.json();
             })
             .then((data) => {
+                setProteinId(pId)
                 setXlabel(data["x_label"])
                 setYlabel(data["y_label"])
                 setCPTscores(data["cpt_scores"])
+                
             })
-    }, []);
+    }, [location]);
 
     // TODO: add those two functions to heatmap component?
     const createColorMapper = () => {
@@ -154,17 +158,19 @@ export default function ProteinPage() {
                 </div>
             </div>
             <div className='DensityPlot'>
-                {cptScores && <DensityPlot proteinId={proteinId} cptScores={cptScores["cpt_scores"]} />}
+                {cptScores && <DensityPlot proteinId={proteinId} dataSource={dataSource}
+                    cptScores={cptScores["cpt_scores"]} />}
+            </div>
+
+            <div className='ClinVarTable'>
+                {cptScores &&
+                    <ClinVarTable proteinId={proteinId} cptScores={cptScores["cpt_scores"]} dataSource={dataSource}/>}
             </div>
             
-            {
-                dataSource === "cpt" && cptScores && 
-                <div className='ClinVarTable'>
-                    <ClinVarTable proteinId={proteinId} cptScores={cptScores["cpt_scores"]} />
-                </div>
-            }
             <div className='MolstarStructure'>
-                <MolstarStructure proteinId={proteinId} />
+                {cptScores &&
+                    <MolstarStructure proteinId={proteinId} dataSource={dataSource}/>
+                }
             </div>
         </div>
     )

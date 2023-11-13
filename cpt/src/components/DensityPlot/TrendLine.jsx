@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './TrendLine.scss';
 
 export default function TrendLine({
     avgScore, width, height, precision, maxY, maxX, cptScores, showPoints}) {
@@ -6,6 +7,7 @@ export default function TrendLine({
     const FONT_SIZE = 6;
     const padding = 12;
     const chartWidth = width - padding;
+    // const chartWidth = maxX * 3;
     const chartHeight = height - padding * 2;
 
     // const [showPoints, setShowPoints] = useState(false);
@@ -19,7 +21,7 @@ export default function TrendLine({
 
     const AxisX = () => (
         <polyline fill="none" stroke="black" strokeWidth=".8"
-            points={`${padding},${height - padding} ${width},${height - padding}`} />
+            points={`${padding},${height - padding} ${width},${height - padding}`}/>
     );
 
     const AxisY = () => (
@@ -67,6 +69,8 @@ export default function TrendLine({
         return xAxis.map((element, index) => {
             const x =
                 (element / maxX) * chartWidth + padding - FONT_SIZE / 2;
+            // console.log("x: " + x)
+            // console.log(chartWidth)
             return (
                 <g className='labelXAxis'>
                 <line
@@ -89,7 +93,7 @@ export default function TrendLine({
                 >
                     {element}
                 </text>
-                    </g>
+                </g>
             );
             });
     };
@@ -162,6 +166,7 @@ export default function TrendLine({
                     </g>
                 }
 
+             
             </svg>
         </div>
     )

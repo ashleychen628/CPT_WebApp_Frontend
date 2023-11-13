@@ -9,12 +9,14 @@ NavBtnLinkFile
 } from './NavbarElements';
 import SearchBar from '../FunctionalBtns/SearchBar';
 import UploadData from '../FunctionalBtns/UploadData';
+// import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 	const [open, setOpen] = React.useState(false);
-	
+	// const navigate = useNavigate();
 	const handleClickOpen = () => {
 		setOpen(true);
+		// navigate('/UploadData');
 	};
 
 	const handleClose = () => {
