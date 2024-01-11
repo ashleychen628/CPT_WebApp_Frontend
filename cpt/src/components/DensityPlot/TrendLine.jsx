@@ -64,7 +64,13 @@ export default function TrendLine({
     const XLabels = () => {
         const y = height - padding + FONT_SIZE * 2 - 3;
         
-        const xAxis = Array.from({ length: 49 }, (_, i) => (i + 1) * 5);
+        // const xAxis = Array.from({ length: 49 }, (_, i) => (i + 1) * 5);
+        let gap = 5;
+        if (maxX > 500) {
+            gap = 5 * (Math.floor(maxX / 500) + 1);
+        }
+ 
+        const xAxis = Array.from({ length: maxX / gap}, (_, i) => (i + 1) * gap);
         
         return xAxis.map((element, index) => {
             const x =

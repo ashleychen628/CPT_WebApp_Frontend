@@ -17,11 +17,14 @@ import Divider from '@mui/material/Divider';
 import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import IconButton from '@mui/material/IconButton';
 import globalVal from "../../globalVal";
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import Histogram from "../Histogram";
 
 const AA_LIST_PROPERTY = 'WFYPMILVAGCSTQNDEHRK';
 const EQUAL_THRESHOLD = 1e-12;
 const WHITE = rgb(255, 255, 255);
+const BLACK = rgb(0,0,0);
 // const LIGHT_GREY = rgb(219, 219, 219);
 // const RED = rgb(220, 0, 0);
 // const BLUE = rgb(143, 179, 255);
@@ -39,6 +42,7 @@ export default function ProteinPage() {
     const [xLabels, setXlabel] = useState();
     const [cptScores, setCPTscores] = useState();
     const [proteinId, setProteinId] = useState();
+    const [data, setData] = useState();
     const location = useLocation();
 
     useEffect(() => {
@@ -53,10 +57,10 @@ export default function ProteinPage() {
                 setXlabel(data["x_label"])
                 setYlabel(data["y_label"])
                 setCPTscores(data["cpt_scores"])
-                
+                setData(data["data"])
             })
     }, [location]);
-
+    // console.log(data)
     // TODO: add those two functions to heatmap component?
     const createColorMapper = () => {
         
@@ -72,6 +76,9 @@ export default function ProteinPage() {
             // console.log(v);
             // symmetrical case
             // var mappedVal = (v + range) / (2 * range);
+            if (v === 'N/A') {
+                return BLACK.hex();
+            }
             var mappedVal = (v - minVal) / (maxVal - minVal);
 
             if (!mappedVal) {
@@ -161,6 +168,9 @@ export default function ProteinPage() {
                 {cptScores && <DensityPlot proteinId={proteinId} dataSource={dataSource}
                     cptScores={cptScores["cpt_scores"]} />}
             </div>
+            <div className='Histogram'>
+                {cptScores && <Histogram data={data} />}
+            </div> 
 
             <div className='ClinVarTable'>
                 {cptScores &&

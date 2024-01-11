@@ -12,7 +12,6 @@ export default function Structure(props) {
     useEffect(() => {
         setCifName(props.cifName);
         // setDataSource(props.dataSource);
-        console.log('ashley');
     }, [props.cifName])
 
 

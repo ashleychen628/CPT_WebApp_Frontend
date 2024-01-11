@@ -22,7 +22,9 @@ export default function InteractiveHeatMap({
   mapValueX,
   setMapValueX,
   mapValueY,
-  setMapValueY
+  setMapValueY,
+  // maxDistance,
+  // minDistance
 }) {
 
   // const [mapValueX, setMapValueX] = useState({ scale: 1, translation: { x: xValue, y: -9 } });
@@ -356,6 +358,7 @@ export default function InteractiveHeatMap({
     setMapValue({ scale: 1, translation: { x: 0, y: 0 } });
     setMapValueX({ scale: 1, translation: { x: 0, y: -9 } });
     // setMapValueY({ scale: 1, translation: { x: 0, y: 0 } });
+    setValue([1, maxDistance]);
     document.getElementById("x-labels").style.gap = "0px";
     document.getElementById("x-labels").style.paddingLeft = "0px";
   };
@@ -407,7 +410,10 @@ export default function InteractiveHeatMap({
                 // updateXLableGap(value.scale)
                 setMapValue(value);
                 setMapValueX({ scale: 1, translation: { x: value.translation.x, y: -9 } });
-        
+             
+                var left = Math.ceil(- value.translation.x / (value.scale * 10));
+                var right = left + Math.ceil(viewportWidth / (value.scale * 10)) - 1;
+                setValue([left, right]);
                 // setMapValueY({ scale: value.scale, translation: { x: 0, y: mapValue.translation.y } }); 
               }}
               minScale={1} maxScale={8} showControls>
@@ -452,63 +458,94 @@ export default function InteractiveHeatMap({
     )
   }
 
-  // var viewportWidth = document.getElementById("heatmap-item") &&
-  //                     document.getElementById("heatmap-item").clientWidth;
+  var viewportWidth = document.getElementById("heatmap-item") &&
+                      document.getElementById("heatmap-item").clientWidth;
+  var viewportWidth2 = Math.floor((window.innerWidth - 200) * 0.96);
 
-  // const minDistance = Math.trunc((viewportWidth - 20) / (10 * 8));
-  // const maxDistance = Math.trunc((viewportWidth - 20) / 10);
+  const minDistance = Math.trunc((viewportWidth2 - 20) / (10 * 8));
+  const maxDistance = Math.floor((viewportWidth2 - 20) / 10) - 1;
+  const [value, setValue] = React.useState([1, maxDistance]);
 
-  // const [value1, setValue1] = React.useState([1, 30]);
-  // console.log(maxDistance)
-  //   console.log(value1[1])
+  const handleChange1 = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
 
-  // const handleChange1 = (event, newValue, activeThumb) => {
-  //   if (!Array.isArray(newValue)) {
-  //     return;
-  //   }
-
-  //   if (activeThumb === 0) {
-  //     let leftMost = Math.max(newValue[0], value1[1] - maxDistance)
-  //     setValue1([Math.min(leftMost, value1[1] - minDistance), value1[1]]);
-  //   } else {
-  //     let leftMost = Math.min(newValue[1], value1[0] + maxDistance)
-  //     setValue1([value1[0], Math.max(leftMost, value1[0] + minDistance)]);
-  //   }
+    // if (activeThumb === 0) {
+    //   let leftMost = Math.max(newValue[0], value1[1] - maxDistance)
+    //   setValue1([Math.min(leftMost, value1[1] - minDistance), value1[1]]);
+    // } else {
+    //   let leftMost = Math.min(newValue[1], value1[0] + maxDistance)
+    //   setValue1([value1[0], Math.max(leftMost, value1[0] + minDistance)]);
+    // }
+    var right = 0;
+    var left = 0;
+    if (newValue[1] - newValue[0] < minDistance) {
+      if (activeThumb === 0) {
+        const clamped = Math.min(newValue[0], cpt_scores.length - minDistance);
+        left = clamped;
+        right = clamped + minDistance;
+        setValue([left, right]);
+      } else {
+        const clamped = Math.max(newValue[1], minDistance);
+        left = clamped - minDistance;
+        right = clamped;
+        setValue([left, right]);
+      }
+    } else if (newValue[1] - newValue[0] > maxDistance || newValue[1] - newValue[0] === maxDistance) {
+      if (activeThumb === 0) {
+          const clamped = newValue[0];
+          left = clamped;
+          right = clamped + maxDistance;
+          setValue([left, right]);
+        } else {
+          const clamped = newValue[1];
+          left = clamped - maxDistance;
+          right = clamped;
+          setValue([left, right]);
+        }
+    }
+    else {
+      console.log(newValue[1] - newValue[0]) 
+      left = newValue[0];
+      right = newValue[1];
+      setValue(newValue);
+    }
    
-  //   let newScale = (viewportWidth - 20) / ((value1[1] - value1[0]) * 10);
-  //   let newX = -(((value1[0]) * 10 * newScale));
-  //   // let newX = mapValueX.translation.x;
-  //   setMapValue({ scale: newScale, translation: { x: newX, y: 0 } })
-  //   setMapValueX({ scale: 1, translation: { x: newX, y: 0 } })
-  //   let newGap = newScale * 10 - 10;
-  //   document.getElementById("x-labels").style.gap = newGap + "px";
-  //   document.getElementById("x-labels").style.paddingLeft = newGap / 2 + "px";
-  // };
+    let newScale = (viewportWidth - 20) / ((right - left) * 10);
+    console.log(newScale);
+    let newX = -(((left) * 10 * newScale));
+    console.log(newX);
+    // let newX = mapValueX.translation.x;
+    setMapValue({ scale: newScale, translation: { x: newX, y: 0 } })
+    setMapValueX({ scale: 1, translation: { x: newX, y: -9 } })
+    let newGap = newScale * 10 - 10;
+    document.getElementById("x-labels").style.gap = newGap + "px";
+    document.getElementById("x-labels").style.paddingLeft = newGap / 2 + "px";
+  };
 
   return (
     <div>
 
       {showHeatMap()}
 
-      <button style={{ float: "right", position: 'relative' }}
-              onClick={() => handleReset()}>
-        Back to the origin
-      </button>
-
-
-      {/* <Box sx={{ width: "80%" }}>
+      {/* <Box sx={{ width: "100%" }}>
         <Slider
           // getAriaLabel={() => 'Minimum distance'}
-          value={value1}
+          value={value}
           onChange={handleChange1}
           valueLabelDisplay="auto"
           // getAriaValueText={valuetext}
           disableSwap
           min={1}
-          max={247}
+          max={cpt_scores.length}
         />
       </Box> */}
 
+      <button style={{ float: "right", position: 'relative' }}
+              onClick={() => handleReset()}>
+        Back to the origin
+      </button>
     </div>
   );
 };

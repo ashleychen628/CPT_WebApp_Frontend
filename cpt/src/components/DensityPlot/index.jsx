@@ -11,7 +11,7 @@ import globalVal from '../../globalVal';
 // const PLOTHEIGHT = 100;
 const PLOT_WIDTH = 741;
 const PLOT_HEIGHT = 100;
-const FONT_SIZE = PLOT_WIDTH / 247;
+// const FONT_SIZE = PLOT_WIDTH / 247;
 const precision = 2;
 
 export default function DensityPlot(props) {
@@ -55,7 +55,7 @@ export default function DensityPlot(props) {
                     precision={2}
                     maxY={1}
                     // maxX={maxX}
-                    maxX={246}
+                    maxX={props.cptScores.length}
                     cptScores={props.cptScores}
                     showPoints={showPoints}
                         />}
